@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>Purpose</h1>
+The Server Sniffer will make requests to a web server of your chosing and try to give you a picture of what it's using.
+<h1>How it works</h1>
+Use client side code to make a same-origin-policy-busting request.
+<h1>Try it out</h1>
+<fieldset>
+    <legend>Request Url</legend>
+    <input type="text" id="txt_request_url"></input>
+    <button id="btn_sniff">Sniff</button>
+</fieldset>
+<div class="panel">
+
+</div>
+@section scripts {
+<script language="javascript">
+    $("#btn_sniff").click(function (evt, itm) {
+        var request_url = $("#txt_request_url").val();
+        $.ajax(request_url).success(function (data, textStatus, request) {
+            alert("done!" + request.getAllResponseHeaders());
+
+        })
+    });
+</script>
+}
