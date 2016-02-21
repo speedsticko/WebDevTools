@@ -22,10 +22,22 @@ namespace WebDevTools.Controllers
             return View();
         }
 
+        class HttpHeaders
+        {
+            public Dictionary<string, string> RequestHeaders { get; set; }
+            public Dictionary<string, string> ResponseHeaders { get; set; }
+        }
+
         [HttpPost]
         public async Task<IActionResult> ServerSniffer(string uri)
         {
+            
+            var request_headers = new Dictionary<string, string>();
             var response_headers = new Dictionary<string, string>();
+
+            var http_headers = new HttpHeaders();
+            http_headers.RequestHeaders = request_headers;
+            http_headers.ResponseHeaders = response_headers;
             using (var http_client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Head, uri);
@@ -35,9 +47,13 @@ namespace WebDevTools.Controllers
                     {
                         response_headers.Add(header.Key, string.Join(",", header.Value));
                     }
+                    foreach (var header in request.Headers)
+                    {
+                        request_headers.Add(header.Key, string.Join(",", header.Value));
+                    }
                 }
             }
-            var json_result = new JsonResult(response_headers);
+            var json_result = new JsonResult(http_headers);
             return json_result;
         }
     }
