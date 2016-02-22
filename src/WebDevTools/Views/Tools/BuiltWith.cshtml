@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>Purpose</h1>
+The Built With tool will analyze a web app to see what libraries and frameworks are being used.
+<h1>How it works</h1>
+
+<h1>Try it out</h1>
+<fieldset>
+    <legend>Request Url</legend>
+    <input type="text" id="txt_request_url"></input>
+    <button id="btn_sniff">See what it was built with</button>
+</fieldset>
+<div id="results" class="panel">
+
+</div>
+@section scripts {
+<script language="javascript">
+    $("#btn_sniff").click(function (evt, itm) {
+        var request_url = $("#txt_request_url").val();
+        $.post("/Tools/ServerSniffer?uri=" + request_url).success(function (data, textStatus, request) {
+            $("#results").text(JSON.stringify(data));
+
+        })
+    });
+</script>
+}

@@ -22,6 +22,11 @@ namespace WebDevTools.Controllers
             return View();
         }
 
+        public IActionResult BuiltWith()
+        {
+            return View();
+        }
+
         class HttpHeaders
         {
             public Dictionary<string, string> RequestHeaders { get; set; }
