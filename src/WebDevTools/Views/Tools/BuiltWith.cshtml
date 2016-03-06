@@ -20,7 +20,7 @@ The Built With tool will analyze a web app to see what libraries and frameworks 
 <script language="javascript">
     $("#btn_sniff").click(function (evt, itm) {
         var request_url = $("#txt_request_url").val();
-        $.post("/Tools/ServerSniffer?uri=" + request_url).success(function (data, textStatus, request) {
+        $.post("/Tools/BuiltWith?uri=" + request_url).success(function (data, textStatus, request) {
             $("#results").text(JSON.stringify(data));
 
         })
