@@ -88,8 +88,31 @@ namespace WebDevTools.Controllers
                 var request = new HttpRequestMessage(HttpMethod.Get, uri);
                 using (var response = await http_client.SendAsync(request))
                 {
-                    HtmlDocument doc = new HtmlDocument();
-               
+                    
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var resp_stream = await response.Content.ReadAsStreamAsync();
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.Load(resp_stream);
+                        resp_stream.Dispose();
+                        
+                        var doc_node = doc.DocumentNode;
+
+                        var script_tags = doc_node.SelectNodes("//script");
+                        var style_tags = doc_node.SelectNodes("//style");
+                        var link_tags = doc_node.SelectNodes("//link");
+
+                        foreach(var script in script_tags)
+                        {
+                            var src_attr = script.Attributes["src"];
+                            info.Scripts.Add(src_attr == null ? "inline" : src_attr.Value);
+                        }
+                        foreach (var link in link_tags)
+                        {
+                            var href_attr = link.Attributes["href"];
+                            info.Stylesheets.Add(href_attr == null ? "inline" : href_attr.Value);
+                        }
+                    }
                 }
             }
             var json_result = new JsonResult(info);
